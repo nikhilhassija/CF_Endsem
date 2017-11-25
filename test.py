@@ -1,5 +1,6 @@
 import reader
 import numpy as np
+from tqdm import tqdm
 
 from config import num_users, num_items
 
@@ -33,8 +34,8 @@ def clamp(M, l, r):
 	return M_C
 
 
-reg_lambda = 0.1
-max_epochs = 1000
+reg_lambda = 2.5
+max_epochs = 100
 
 for fold in range(1, 6):
 	Y = reader.get_matrix("datasets/ml-100k/u{}.base".format(fold))
@@ -43,7 +44,9 @@ for fold in range(1, 6):
 
 	X = np.random.rand(*Y.shape)
 
-	for epoch in range(max_epochs):
+	X = (4 * X) + 1
+
+	for epoch in tqdm(range(max_epochs)):
 		B = X + Y - (R*X)
 
 		U, s, V = np.linalg.svd(B)
