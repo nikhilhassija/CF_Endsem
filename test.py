@@ -65,7 +65,7 @@ for fold in range(1, 6):
 	err = 0
 
 	for user, item, rating in T:
-		err += np.abs(int(X[user][item]) - rating)
+		err += np.abs(np.rint(X[user][item]) - rating)
 
 	MAE = err / len(T)
 
