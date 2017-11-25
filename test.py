@@ -35,8 +35,8 @@ def clamp(M, l, r):
 	return M_C
 
 
-reg_lambda = float(sys.args[1])
-max_epochs = int(sys.args[2])
+reg_lambda = float(sys.argv[1])
+max_epochs = int(sys.argv[2])
 
 for fold in range(1, 6):
 	Y = reader.get_matrix("datasets/ml-100k/u{}.base".format(fold))
