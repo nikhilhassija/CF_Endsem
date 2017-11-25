@@ -1,7 +1,8 @@
 import reader
 import numpy as np
-from tqdm import tqdm
+import sys
 
+from tqdm import tqdm
 from config import num_users, num_items
 
 def sign_mat(RM):
@@ -34,8 +35,8 @@ def clamp(M, l, r):
 	return M_C
 
 
-reg_lambda = 2.5
-max_epochs = 100
+reg_lambda = float(sys.args[1])
+max_epochs = int(sys.args[2])
 
 for fold in range(1, 6):
 	Y = reader.get_matrix("datasets/ml-100k/u{}.base".format(fold))
@@ -49,9 +50,9 @@ for fold in range(1, 6):
 	for epoch in tqdm(range(max_epochs)):
 		B = X + Y - (R*X)
 
-		U, s, V = np.linalg.svd(B)
+		U, s, V = np.linalg.svd(B, full_matrices = False)
 
-		S = np.zeros((num_users, num_items))
+		S = np.zeros((num_users, num_users))
 
 		np.fill_diagonal(S, soft(s, reg_lambda))
 
