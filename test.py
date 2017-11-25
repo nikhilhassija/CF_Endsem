@@ -34,7 +34,7 @@ def clamp(M, l, r):
 
 
 reg_lambda = 0.1
-max_epochs = 10
+max_epochs = 1000
 
 for fold in range(1, 6):
 	Y = reader.get_matrix("datasets/ml-100k/u{}.base".format(fold))
@@ -44,11 +44,13 @@ for fold in range(1, 6):
 	X = np.random.rand(*Y.shape)
 
 	for epoch in range(max_epochs):
-		U, s, V = np.linalg.svd(X)
+		B = X + Y - (R*X)
+
+		U, s, V = np.linalg.svd(B)
 
 		S = np.zeros((num_users, num_items))
 
-		np.fill_diagonal(S, s)
+		np.fill_diagonal(S, soft(s, reg_lambda))
 
 		X = np.dot(U, np.dot(S, V))
 
